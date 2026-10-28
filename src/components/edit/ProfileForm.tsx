@@ -2,6 +2,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useSiteData } from '../../store/siteData';
 import { newId, type CampusItem, type Profile, type TimelineItem } from '../../types';
 import { Field, IconButton, TextArea, TextInput } from '../ui/Field';
+import { ImageField } from '../ui/ImageField';
 
 export function ProfileForm() {
   const { data, updateProfile } = useSiteData();
@@ -23,6 +24,13 @@ export function ProfileForm() {
     <div className="space-y-6">
       <section className="space-y-4">
         <p className="eyebrow">基本信息</p>
+        <ImageField
+          label="个人照片"
+          hint="圆形显示，会自动压缩到 512px 以内"
+          value={profile.avatarImage}
+          onChange={(value) => updateProfile({ avatarImage: value })}
+          shape="circle"
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <TextInput label="姓名" value={profile.name} onChange={(e) => set('name', e.target.value)} />
           <TextInput
@@ -31,8 +39,7 @@ export function ProfileForm() {
             value={profile.avatarInitial}
             maxLength={2}
             onChange={(e) => set('avatarInitial', e.target.value)}
-          />
-          <TextInput label="身份" hint="显示在导航旁" value={profile.title} onChange={(e) => set('title', e.target.value)} />
+          />          <TextInput label="身份" hint="显示在导航旁" value={profile.title} onChange={(e) => set('title', e.target.value)} />
           <TextInput label="学校" value={profile.school} onChange={(e) => set('school', e.target.value)} />
           <TextInput label="专业" value={profile.major} onChange={(e) => set('major', e.target.value)} />
           <TextInput label="年级" value={profile.grade} onChange={(e) => set('grade', e.target.value)} />

@@ -82,12 +82,21 @@ export function Hero() {
 
         <aside className="reveal card overflow-hidden">
           <div className="flex items-center gap-4 border-b p-6" style={{ borderColor: 'var(--line)', background: 'var(--surface-soft)' }}>
-            <div
-              className="display flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-2xl"
-              style={{ background: 'var(--accent-soft)', color: 'var(--accent)', border: '1px solid var(--line-strong)' }}
-            >
-              {profile.avatarInitial}
-            </div>
+            {profile.avatarImage ? (
+              <img
+                src={profile.avatarImage}
+                alt={`${profile.name} 的照片`}
+                className="h-20 w-20 shrink-0 rounded-full object-cover"
+                style={{ border: '1px solid var(--line-strong)' }}
+              />
+            ) : (
+              <div
+                className="display flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-2xl"
+                style={{ background: 'var(--accent-soft)', color: 'var(--accent)', border: '1px solid var(--line-strong)' }}
+              >
+                {profile.avatarInitial}
+              </div>
+            )}
             <div className="min-w-0">
               <p className="display text-xl">{profile.name}</p>
               <p className="mt-1 truncate text-[12px]" style={{ color: 'var(--muted)' }}>

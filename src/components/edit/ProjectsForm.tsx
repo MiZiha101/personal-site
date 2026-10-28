@@ -2,6 +2,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useSiteData } from '../../store/siteData';
 import { newId, type Project } from '../../types';
 import { Field, IconButton, TextArea, TextInput } from '../ui/Field';
+import { ImageField } from '../ui/ImageField';
 
 export function ProjectsForm() {
   const { data, setProjects } = useSiteData();
@@ -76,6 +77,17 @@ export function ProjectsForm() {
 
           <div className="mt-3">
             <TextArea label="一句话简介" rows={2} value={project.summary} onChange={(event) => update(project.id, { summary: event.target.value })} />
+          </div>
+
+          <div className="mt-3">
+            <ImageField
+              label="项目照片（可选）"
+              hint="比如实物照、原理图或运行截图"
+              shape="square"
+              value={project.cover}
+              onChange={(value) => update(project.id, { cover: value })}
+              options={{ maxSize: 1200, quality: 0.8, maxLength: 200_000 }}
+            />
           </div>
 
           <div className="mt-3">

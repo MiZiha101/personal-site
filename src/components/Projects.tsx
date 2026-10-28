@@ -37,7 +37,17 @@ export function Projects() {
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              <div className="min-w-0">
+              <div className="flex min-w-0 items-start gap-4">
+                {project.cover ? (
+                  <img
+                    src={project.cover}
+                    alt={`${project.title} 的照片`}
+                    className="hidden h-16 w-24 shrink-0 rounded-lg object-cover sm:block"
+                    style={{ border: '1px solid var(--line)' }}
+                  />
+                ) : null}
+
+                <div className="min-w-0">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <h3 className="display text-lg transition-colors group-hover:opacity-80 md:text-xl">{project.title}</h3>
                   <span className="text-[11px]" style={{ color: 'var(--muted)' }}>
@@ -55,6 +65,7 @@ export function Projects() {
                       {tag}
                     </span>
                   ))}
+                </div>
                 </div>
               </div>
 
@@ -91,6 +102,14 @@ export function Projects() {
       >
         {active ? (
           <div className="space-y-4 text-[14.5px] leading-8" style={{ color: 'var(--ink-soft)' }}>
+            {active.cover ? (
+              <img
+                src={active.cover}
+                alt={`${active.title} 的照片`}
+                className="max-h-72 w-full rounded-xl object-cover"
+                style={{ border: '1px solid var(--line)' }}
+              />
+            ) : null}
             {active.desc.map((paragraph, index) => (
               <p key={`${paragraph.slice(0, 12)}-${index}`}>{paragraph}</p>
             ))}

@@ -25,6 +25,8 @@ export type Profile = {
   github: string;
   githubLabel: string;
   avatarInitial: string;
+  /** 头像照片（压缩后的 data URL）；为空则显示 avatarInitial */
+  avatarImage: string;
   timeline: TimelineItem[];
   campus: CampusItem[];
 };
@@ -50,6 +52,8 @@ export type Project = {
   year: string;
   status: string;
   kind: string;
+  /** 项目配图（压缩后的 data URL，可选） */
+  cover?: string;
   demo?: string;
   repo?: string;
 };

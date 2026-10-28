@@ -46,6 +46,14 @@ Vite 5 + React 18 + TypeScript（strict）+ Tailwind CSS 3 + lucide-react。
 - 解锁状态用 `sessionStorage['personal-site-unlocked']`，不要改成 localStorage（那会变成长期免密）。
 - `sha256Hex` 是自写实现（不依赖 `crypto.subtle`，file:// 也能用）；改动它必须用 `node:crypto` 对 `abc`、空串、中文、超长串各验一次。
 
+### 4.2 照片约定
+
+- 照片字段只有两个：`profile.avatarImage`（头像）与 `project.cover`（项目配图），都是压缩后的 **data URL 字符串**，为空字符串表示没有。
+- 上传一律走 `utils/image.ts` 的 `fileToCompressedDataUrl`（Canvas 缩放 + JPEG 降质），**禁止**直接把原图 base64 塞进 localStorage。
+- 压缩参数：头像 `maxSize 512 / quality 0.85 / maxLength 260KB`；项目图 `maxSize 1200 / quality 0.8 / maxLength 200KB`。
+- 渲染：头像用 `object-cover` 圆形，缺图回退 `avatarInitial`；项目图列表用缩略图、详情用大图，缺图不占位。
+- 隐私：照片只存本机浏览器，**不上传任何服务器**；文档和界面文案都要保留这句说明。
+
 ## 5. 设计与交互硬性要求
 
 | 项目 | 规范 |

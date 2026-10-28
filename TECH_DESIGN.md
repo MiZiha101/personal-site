@@ -62,9 +62,9 @@ npm run preview
 │  │  │  ├─ ProjectsForm.tsx  # 项目增删改
 │  │  │  ├─ PostsForm.tsx     # 笔记增删改
 │  │  │  └─ DataPanel.tsx     # 导入 / 导出 / 恢复默认
-│  │  └─ ui/                  # SectionHeading、Field 等原子组件
+│  │  ├─ ui/                  # SectionHeading、Field、ImageField 等原子组件
 │  ├─ hooks/useCopy.ts useReveal.ts
-│  └─ utils/markdown.tsx
+│  └─ utils/markdown.tsx image.ts   # Markdown 渲染 / 图片压缩
 ```
 
 ---
@@ -141,6 +141,18 @@ node -e "console.log(require('crypto').createHash('sha256').update('你的新口
 ```
 
 ---
+
+### 5.2 照片上传（本地压缩）
+
+| 项 | 做法 |
+|---|---|
+| 入口 | 编辑面板 → 基本信息「个人照片」；编辑面板 → 项目「项目照片」 |
+| 压缩 | `utils/image.ts`：FileReader → Image → Canvas 缩放 → `toDataURL('image/jpeg', q)`；头像长边 ≤512px、质量 0.85、结果 >260KB 自动降质；项目图长边 ≤1200px、质量 0.8、上限 200KB |
+| 透明图 | Canvas 先铺白底再画，避免透明 PNG 转 JPEG 变黑 |
+| 存储 | data URL 直接进 `profile.avatarImage` / `project.cover`，随整站数据存 `localStorage` |
+| 体积控制 | 实测头像 27KB 原图 → 压缩后 13.6KB；项目图 38KB → 27.7KB；含一张头像 + 一张项目图的整站数据约 47KB，远低于 5MB 配额 |
+| 兜底 | 文件 >20MB、非图片、解码失败、压缩后仍超限，都返回中文提示，不写入数据 |
+| 回退 | 没有照片时显示 `avatarInitial` 首字母头像，布局不跳动 |
 
 ## 六、UI 实现要点
 
