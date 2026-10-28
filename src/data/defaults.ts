@@ -21,8 +21,8 @@ export const defaultData: SiteData = {
       '还有很多没学明白的地方：RTOS 只用过一点点，嵌入式 Linux 刚起步，PCB 也只会画简单的。这学期主要在补这些，顺便找嵌入式方向的实习。',
     ],
     email: '16657002787@163.com',
-    github: 'https://github.com/MiZiha',
-    githubLabel: 'github.com/MiZiha',
+    github: 'https://github.com/MiZiha101',
+    githubLabel: 'github.com/MiZiha101',
     avatarInitial: '潘',
     // 头像照片：换照片时直接替换 public/avatar.jpg（建议正方形、400px 以上）
     avatarImage: './avatar.jpg',
