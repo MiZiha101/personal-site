@@ -4,7 +4,11 @@
 
 ## 1. 项目是什么
 
-一名大三学生的个人主页：浅色「编辑感」单页站（暖白纸 + 松绿 + 衬线标题），带**站内编辑面板**——姓名、简介、技能、项目、笔记都能在页面上直接改，改动存 `localStorage` 并可导入导出。
+一名大三学生（电子信息工程 · 嵌入式方向）的个人主页：浅色「编辑感」单页站（暖白纸 + 松绿 + 衬线标题）。
+
+内容全部可在页面上编辑，但**编辑入口有口令验证**：代码里只保存 SHA-256 摘要（`src/auth/passcode.ts`），明文口令不写进任何文件，由本人自己保管。改动存 `localStorage`，可导入导出 JSON。
+
+语气要求：务实、不夸口。只写真正做过的（焊板/固件/调试），明确写出还不熟的（RTOS、嵌入式 Linux、复杂 PCB），禁止「精通」「资深」这类词。
 
 - 需求以 `PRD.md` v2.0 为准，技术方案以 `TECH_DESIGN.md` 为准。
 - 当前视觉是**浅色**方案；v1.0 的深色星空版本已废弃，不要回退。
@@ -34,6 +38,13 @@ Vite 5 + React 18 + TypeScript（strict）+ Tailwind CSS 3 + lucide-react。
 - 条目必须有稳定 `id`（用 `newId()`），React key 一律用 `id`，不要用索引。
 - 字段格式约定：`bio` / `desc` 是 `string[]`（段落数组），面板输入按「两个换行 = 一段」；标签是 `string[]`，输入按中英文逗号拆分。
 - 新增可编辑字段时，四处都要改：`types.ts` → `defaults.ts` → 对应 `edit/*Form.tsx` → 展示组件。
+
+### 4.1 鉴权约定
+
+- 任何「编辑」入口（导航按钮、移动端浮动按钮、名片卡底部）都必须调用 Context 的 `requestEdit()`；**禁止**在组件里直接 `setEditing(true)` 绕过口令。
+- 口令只以 SHA-256 摘要形式存在 `src/auth/passcode.ts`，**禁止**把明文口令写进代码或文档。
+- 解锁状态用 `sessionStorage['personal-site-unlocked']`，不要改成 localStorage（那会变成长期免密）。
+- `sha256Hex` 是自写实现（不依赖 `crypto.subtle`，file:// 也能用）；改动它必须用 `node:crypto` 对 `abc`、空串、中文、超长串各验一次。
 
 ## 5. 设计与交互硬性要求
 

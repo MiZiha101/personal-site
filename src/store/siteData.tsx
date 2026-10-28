@@ -9,9 +9,11 @@ import {
   type ReactNode,
 } from 'react';
 import { defaultData } from '../data/defaults';
+import { verifyPasscode } from '../auth/passcode';
 import type { Post, Profile, Project, SiteData, SkillGroup } from '../types';
 
 const STORAGE_KEY = 'personal-site-data-v1';
+const UNLOCK_KEY = 'personal-site-unlocked';
 
 export type SaveState = 'idle' | 'saved' | 'error';
 
@@ -19,6 +21,17 @@ type SiteDataContextValue = {
   data: SiteData;
   editing: boolean;
   setEditing: (value: boolean) => void;
+  /** 已通过口令验证（本次会话有效） */
+  unlocked: boolean;
+  /** 口令验证弹窗是否打开 */
+  gateOpen: boolean;
+  /** 点「编辑资料」时调用：已解锁直接开面板，否则先要求验证 */
+  requestEdit: () => void;
+  closeGate: () => void;
+  /** 验证口令，成功则解锁并打开面板 */
+  unlock: (passcode: string) => boolean;
+  /** 退出编辑：关闭面板并清除本次会话的解锁状态 */
+  lock: () => void;
   saveState: SaveState;
   customized: boolean;
   updateProfile: (patch: Partial<Profile>) => void;
@@ -59,9 +72,20 @@ function hasSavedData(): boolean {
   }
 }
 
+function readUnlocked(): boolean {
+  if (typeof sessionStorage === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(UNLOCK_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 export function SiteDataProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<SiteData>(() => loadData());
   const [editing, setEditing] = useState(false);
+  const [unlocked, setUnlocked] = useState<boolean>(() => readUnlocked());
+  const [gateOpen, setGateOpen] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>('idle');
   const [customized, setCustomized] = useState<boolean>(() => hasSavedData());
   const timer = useRef<number | null>(null);
@@ -166,11 +190,50 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     [replaceData],
   );
 
+  const requestEdit = useCallback(() => {
+    if (unlocked) {
+      setEditing(true);
+      return;
+    }
+    setGateOpen(true);
+  }, [unlocked]);
+
+  const closeGate = useCallback(() => setGateOpen(false), []);
+
+  const unlock = useCallback((passcode: string) => {
+    if (!verifyPasscode(passcode)) return false;
+    setUnlocked(true);
+    setGateOpen(false);
+    setEditing(true);
+    try {
+      sessionStorage.setItem(UNLOCK_KEY, '1');
+    } catch {
+      /* 隐私模式下不可用，忽略：只是本次会话内有效 */
+    }
+    return true;
+  }, []);
+
+  const lock = useCallback(() => {
+    setEditing(false);
+    setUnlocked(false);
+    try {
+      sessionStorage.removeItem(UNLOCK_KEY);
+    } catch {
+      /* 忽略 */
+    }
+  }, []);
+
   const value = useMemo<SiteDataContextValue>(
     () => ({
       data,
       editing,
       setEditing,
+      unlocked,
+      gateOpen,
+      requestEdit,
+      closeGate,
+      unlock,
+      lock,
       saveState,
       customized,
       updateProfile,
@@ -185,6 +248,12 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
     [
       data,
       editing,
+      unlocked,
+      gateOpen,
+      requestEdit,
+      closeGate,
+      unlock,
+      lock,
       saveState,
       customized,
       updateProfile,

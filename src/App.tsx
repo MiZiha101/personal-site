@@ -10,6 +10,7 @@ import { Footer } from './components/Footer';
 import { BackToTop } from './components/BackToTop';
 import { EditFab } from './components/EditFab';
 import { EditDrawer } from './components/edit/EditDrawer';
+import { LoginGate } from './components/auth/LoginGate';
 import { SectionDivider } from './components/ui/SectionHeading';
 import { useReveal } from './hooks/useReveal';
 
@@ -47,6 +48,7 @@ function Page() {
       <BackToTop />
       <EditFab />
       <EditDrawer />
+      <LoginGate />
     </>
   );
 }

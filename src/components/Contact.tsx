@@ -44,7 +44,7 @@ export function Contact() {
         index="05"
         label="Contact"
         title="随时可以给我写信"
-        desc="实习机会、项目合作、课程问题，或者只是想交流 AI 编程，都欢迎。我基本每天都会看邮箱。"
+        desc="实习机会、课程问题、硬件调试上的疑难，或者只是想交流嵌入式，都欢迎。"
       />
 
       <div className="mt-12 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">

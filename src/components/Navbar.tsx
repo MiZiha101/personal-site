@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Menu, Pencil, X } from 'lucide-react';
 import { useSiteData } from '../store/siteData';
 
@@ -11,7 +11,7 @@ const links = [
 ];
 
 export function Navbar() {
-  const { data, setEditing } = useSiteData();
+  const { data, requestEdit: openEditor } = useSiteData();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('home');
   const [scrolled, setScrolled] = useState(false);
@@ -74,7 +74,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setEditing(true)}
+            onClick={openEditor}
             className="hidden items-center gap-1.5 rounded-full border bg-surface px-4 py-2 text-[12px] transition-colors md:inline-flex"
             style={{ borderColor: 'var(--line-strong)', color: 'var(--ink-soft)' }}
           >
@@ -117,7 +117,7 @@ export function Navbar() {
                 style={{ borderColor: 'var(--line-strong)' }}
                 onClick={() => {
                   setOpen(false);
-                  setEditing(true);
+                  openEditor();
                 }}
               >
                 <Pencil size={13} />

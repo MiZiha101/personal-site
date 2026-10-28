@@ -10,8 +10,8 @@ export function About() {
       <SectionHeading
         index="01"
         label="About"
-        title="在课堂和代码之间，找一个自己的方向"
-        desc="不喜欢只停留在概念上，更愿意先做出一个能跑的东西，再回头把原理补上。"
+        title="先把东西做出来，再回头补原理"
+        desc="不太喜欢停在概念上；课上学的东西，能焊、能烧、能测的，我都会试着做一遍。"
       />
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[1.05fr_0.95fr]">

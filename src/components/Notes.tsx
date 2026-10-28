@@ -14,8 +14,8 @@ export function Notes() {
       <SectionHeading
         index="04"
         label="Notes"
-        title="写下来，下次就不用重新踩一遍"
-        desc="课程复盘、AI 编程实践和做项目时的一些取舍记录。"
+        title="踩过坑，就顺手记下来"
+        desc="调试记录和学习顺序，主要是写给下次的自己看。"
       />
 
       <ul className="mt-10">

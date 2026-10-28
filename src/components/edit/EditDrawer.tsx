@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, X } from 'lucide-react';
+import { Check, LogOut, X } from 'lucide-react';
 import { useSiteData } from '../../store/siteData';
 import { ProfileForm } from './ProfileForm';
 import { SkillsForm } from './SkillsForm';
@@ -19,7 +19,7 @@ const tabs = [
 type TabId = (typeof tabs)[number]['id'];
 
 export function EditDrawer() {
-  const { editing, setEditing, saveState } = useSiteData();
+  const { editing, setEditing, saveState, lock } = useSiteData();
   const [tab, setTab] = useState<TabId>('profile');
 
   useEffect(() => {
@@ -67,15 +67,26 @@ export function EditDrawer() {
                 {saveState === 'error' ? <span className="ml-2 text-[#c0523f]">保存失败（可能是隐私模式）</span> : null}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setEditing(false)}
-              aria-label="关闭"
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border"
-              style={{ borderColor: 'var(--line)', color: 'var(--muted)' }}
-            >
-              <X size={15} />
-            </button>
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={lock}
+                className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11.5px]"
+                style={{ borderColor: 'var(--line)', color: 'var(--muted)' }}
+              >
+                <LogOut size={12} />
+                退出编辑
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditing(false)}
+                aria-label="关闭"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border"
+                style={{ borderColor: 'var(--line)', color: 'var(--muted)' }}
+              >
+                <X size={15} />
+              </button>
+            </div>
           </div>
 
           <div className="mt-4 flex gap-1 overflow-x-auto pb-1">

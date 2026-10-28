@@ -9,8 +9,8 @@ export function Skills() {
       <SectionHeading
         index="02"
         label="Skills"
-        title="会什么，以及还在补什么"
-        desc="进度条是自评的投入程度，不是打分排名。课程基础来自成绩与课设，工程能力来自做过的项目。"
+        title="会一点，也还有很多在学"
+        desc="进度条只是自评的投入程度，不代表水平。分数低的那几项，是我这学期正在补的。"
       />
 
       <div className="mt-12 grid gap-5 md:grid-cols-2">

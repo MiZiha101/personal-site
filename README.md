@@ -15,7 +15,23 @@ npm run build        # 生产构建 → dist/
 npm run preview
 ```
 
-## 能改哪些内容
+## 能改哪些内容（需要口令）
+
+点右上角「编辑资料」（手机上是右下角浮动按钮）→ **先输入编辑口令**，验证通过才会打开面板。
+
+口令实现：`src/auth/passcode.ts` 里只保存口令的 SHA-256 摘要，不保存明文；连续输错 5 次锁定 30 秒；解锁状态存 `sessionStorage`，关掉标签页即失效；面板右上角「退出编辑」会立刻上锁。
+
+换口令（三步）：
+
+```bash
+# 1. 生成新口令的摘要（把 新口令 换成你的）
+node -e "console.log(require('crypto').createHash('sha256').update('新口令').digest('hex'))"
+```
+
+2. 把输出的十六进制串替换 `src/auth/passcode.ts` 里的 `PASSCODE_HASH`
+3. `npm run build` 后重新部署
+
+> 说明：这是纯前端校验，只用来挡住随手点开的人，不构成真正的安全边界。真权限要放服务端，本作业为了零成本部署刻意不做后端。
 
 | 页签 | 能改什么 |
 |---|---|

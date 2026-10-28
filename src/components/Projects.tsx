@@ -14,8 +14,8 @@ export function Projects() {
       <SectionHeading
         index="03"
         label="Selected Work"
-        title="做过的项目"
-        desc="四个项目里有课程延伸、实训，也有自己折腾出来的工具。点开看每个项目的取舍和踩过的坑。"
+        title="课设和实验室里做的东西"
+        desc="都不算惊艳，但每一个是自己焊过、写过、调过的。点开能看到当时的取舍和踩到的坑。"
       />
 
       <ul className="mt-10">

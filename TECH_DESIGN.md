@@ -13,6 +13,7 @@
 | 样式 | Tailwind CSS 3 + CSS 变量 | 原子类保证一致性，配色集中改一处 |
 | 图标 | lucide-react | 轻量线性图标，风格统一 |
 | 状态 | React Context + useReducer 风格 setter | 内容只有一份，不需要 Redux/Zustand |
+| 编辑鉴权 | 自写 SHA-256（`src/auth/passcode.ts`）+ `sessionStorage` | 纯前端、零依赖、file:// 也能用；只挡随手点开的人 |
 | 持久化 | `localStorage`（key：`personal-site-data-v1`） | 无后端、无隐私上传、刷新不丢 |
 | Markdown | 自写极简渲染器（约 200 行） | 不引依赖、不用 innerHTML，避免 XSS |
 | 字体 | 系统字体（衬线 + 无衬线各一套栈） | 零网络请求，首屏最快 |
@@ -46,12 +47,14 @@ npm run preview
 │  ├─ index.css               # 设计变量 + Tailwind + 组件类
 │  ├─ types.ts                # Profile / SkillGroup / Project / Post / SiteData
 │  ├─ data/defaults.ts        # 默认内容（唯一的内容来源）
-│  ├─ store/siteData.tsx      # Context：读取、修改、持久化、导入导出
+│  ├─ auth/passcode.ts        # SHA-256 实现 + 口令摘要常量
+│  ├─ store/siteData.tsx      # Context：读取、修改、持久化、导入导出、解锁状态
 │  ├─ components/
 │  │  ├─ Navbar.tsx Hero.tsx About.tsx Skills.tsx Projects.tsx Notes.tsx Contact.tsx Footer.tsx
 │  │  ├─ Modal.tsx            # 项目详情 / 笔记正文
 │  │  ├─ BackToTop.tsx
 │  │  ├─ EditFab.tsx          # 移动端浮动编辑按钮
+│  │  ├─ auth/LoginGate.tsx   # 口令验证弹窗
 │  │  ├─ edit/
 │  │  │  ├─ EditDrawer.tsx    # 编辑面板骨架 + 5 个页签
 │  │  │  ├─ ProfileForm.tsx   # 基本信息 / 简介 / 联系方式 / 时间线 / 校园经历
@@ -112,6 +115,30 @@ localStorage ──读取──▶ loadData() ──▶ useState<SiteData>
 **为什么不用后端**：作业场景无账号体系，纯本地存储就能满足「自己能改、立刻生效、隐私安全」，部署成本为零。
 
 **局限与升级路径**：内容只在本人浏览器生效，访客看到的是 `defaults.ts` 里的默认值。升级方式见 DataPanel 提示：把导出的 JSON 覆盖 `defaults.ts`，再构建部署；或（v2.1）改成运行时 `fetch('./data.json')` 初始化。
+
+### 5.1 编辑鉴权（口令）
+
+```
+点击「编辑资料」
+   ├─ 本次会话已解锁（sessionStorage['personal-site-unlocked'] === '1'）→ 直接打开面板
+   └─ 未解锁 → 打开 LoginGate 弹窗
+                ├─ 输入口令 → sha256Hex(输入) === PASSCODE_HASH ? 解锁 + 开面板
+                └─ 不匹配 → 提示剩余次数；连续 5 次 → 锁定 30 秒（组件内倒计时）
+```
+
+实现要点：
+
+1. **只存摘要**：`src/auth/passcode.ts` 里只有 `PASSCODE_HASH`（SHA-256 小写十六进制），仓库里没有明文口令。
+2. **自带 SHA-256**：手写实现（约 60 行）而不是 `crypto.subtle`，因为后者只在 https / localhost 可用；已用 `abc`、空串、中文、超长串与 `node:crypto` 结果逐个核对一致。
+3. **解锁范围**：`sessionStorage`——同一标签页刷新保持解锁，关掉标签页即失效；面板内「退出编辑」会主动清除。
+4. **入口统一**：所有编辑入口（导航按钮、移动端浮动按钮、名片卡底部）都调用 store 的 `requestEdit()`，禁止组件里直接 `setEditing(true)`，避免绕过验证。
+5. **诚实说明**：这是纯前端校验，只能挡住随手点开的人，挡不住开发者工具。真权限必须放服务端；本作业要求零成本部署、不上传数据，所以刻意不做后端，并在 PRD 与技术文档里写清楚。
+
+修改口令：改 `PASSCODE_HASH` 即可，命令行生成摘要：
+
+```bash
+node -e "console.log(require('crypto').createHash('sha256').update('你的新口令').digest('hex'))"
+```
 
 ---
 

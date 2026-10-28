@@ -3,7 +3,7 @@ import { useSiteData } from '../store/siteData';
 import { useCopy } from '../hooks/useCopy';
 
 export function Hero() {
-  const { data, setEditing, customized } = useSiteData();
+  const { data, requestEdit, customized } = useSiteData();
   const { profile } = data;
   const { copied, copy } = useCopy(profile.email);
 
@@ -26,7 +26,7 @@ export function Hero() {
         <div>
           <p className="reveal eyebrow">{profile.title}</p>
 
-          <h1 className="reveal display mt-6 text-[1.65rem] leading-[1.45] sm:text-[2.1rem] md:text-[2.6rem]">
+          <h1 className="reveal display mt-6 text-[1.65rem] leading-[1.45] sm:text-[2rem] md:text-[2.3rem]">
             {profile.tagline.split('，').map((part, index, parts) => (
               <span key={`${part}-${index}`}>
                 {part}
@@ -122,12 +122,12 @@ export function Hero() {
 
           <button
             type="button"
-            onClick={() => setEditing(true)}
+            onClick={requestEdit}
             className="flex w-full items-center justify-center gap-2 border-t px-6 py-3 text-[12px] transition-colors"
             style={{ borderColor: 'var(--line)', color: 'var(--muted)', background: 'var(--surface)' }}
           >
             <Pencil size={12} />
-            {customized ? '内容已在本机修改过 · 点这里继续编辑' : '这些内容你都可以自己改（点这里）'}
+            {customized ? '内容已在本机修改过 · 点这里继续编辑' : '这些内容只有本人能改（点这里验证口令）'}
           </button>
         </aside>
       </div>
