@@ -24,8 +24,8 @@ export const defaultData: SiteData = {
     github: 'https://github.com/MiZiha',
     githubLabel: 'github.com/MiZiha',
     avatarInitial: '潘',
-    // 传自己的照片：网页里点「编辑资料」→ 基本信息 → 照片，选一张即可（自动压缩）
-    avatarImage: '',
+    // 头像照片：换照片时直接替换 public/avatar.jpg（建议正方形、400px 以上）
+    avatarImage: './avatar.jpg',
     timeline: [
       {
         id: 'tl-1',

@@ -25,7 +25,7 @@ export type Profile = {
   github: string;
   githubLabel: string;
   avatarInitial: string;
-  /** 头像照片（压缩后的 data URL）；为空则显示 avatarInitial */
+  /** 头像照片：可以是 public 下的相对路径（如 './avatar.jpg'），也可以是上传后的 data URL；为空则显示 avatarInitial */
   avatarImage: string;
   timeline: TimelineItem[];
   campus: CampusItem[];
