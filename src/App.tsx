@@ -13,9 +13,13 @@ import { EditDrawer } from './components/edit/EditDrawer';
 import { LoginGate } from './components/auth/LoginGate';
 import { SectionDivider } from './components/ui/SectionHeading';
 import { useReveal } from './hooks/useReveal';
+import { useOwnerEntry } from './hooks/useOwnerEntry';
 
 function Page() {
   const { data } = useSiteData();
+
+  // 隐藏入口：#edit 或 Ctrl/Cmd + Shift + E（访客看不到按钮）
+  useOwnerEntry();
 
   // 内容结构变化时重新扫描一次，保证新增的条目也能正常淡入
   useReveal(

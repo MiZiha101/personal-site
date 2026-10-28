@@ -1,10 +1,11 @@
-﻿import { Pencil } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { useSiteData } from '../store/siteData';
 
+/** 仅在已解锁（本人）时出现的浮动编辑按钮，访客看不到 */
 export function EditFab() {
-  const { editing, requestEdit } = useSiteData();
+  const { editing, unlocked, requestEdit } = useSiteData();
 
-  if (editing) return null;
+  if (editing || !unlocked) return null;
 
   return (
     <button
@@ -14,7 +15,7 @@ export function EditFab() {
       style={{ background: 'var(--accent)' }}
     >
       <Pencil size={14} />
-      编辑资料
+      编辑
     </button>
   );
 }

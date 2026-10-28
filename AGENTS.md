@@ -41,10 +41,13 @@ Vite 5 + React 18 + TypeScript（strict）+ Tailwind CSS 3 + lucide-react。
 
 ### 4.1 鉴权约定
 
-- 任何「编辑」入口（导航按钮、移动端浮动按钮、名片卡底部）都必须调用 Context 的 `requestEdit()`；**禁止**在组件里直接 `setEditing(true)` 绕过口令。
-- 口令只以 SHA-256 摘要形式存在 `src/auth/passcode.ts`，**禁止**把明文口令写进代码或文档。
+- **访客看不到任何编辑入口**：页面正文里不得出现「编辑」「本机」「口令」「演示」这类提示词；只有解锁后（`unlocked === true`）才渲染导航「编辑」按钮、移动端浮动按钮、名片卡底部入口。
+- 入口只有两个隐藏触发：地址栏 `#edit`，以及 `Ctrl/Cmd + Shift + E`（实现见 `hooks/useOwnerEntry.ts`）。
+- 任何编辑动作都必须走 Context 的 `requestEdit()`；**禁止**在组件里直接 `setEditing(true)` 绕过口令。
+- 口令只以 SHA-256 摘要形式存在 `src/auth/passcode.ts`，**禁止**把明文口令写进代码或对外可见的文案。
 - 解锁状态用 `sessionStorage['personal-site-unlocked']`，不要改成 localStorage（那会变成长期免密）。
 - `sha256Hex` 是自写实现（不依赖 `crypto.subtle`，file:// 也能用）；改动它必须用 `node:crypto` 对 `abc`、空串、中文、超长串各验一次。
+- 对外文案一律不解释实现：不说「前端校验」「localStorage」「某文件在哪」，只说业务本身。
 
 ### 4.2 照片约定
 
@@ -65,7 +68,7 @@ Vite 5 + React 18 + TypeScript（strict）+ Tailwind CSS 3 + lucide-react。
 | 圆角/按钮 | 按钮与标签用胶囊形；主按钮松绿填充，次按钮白底细边 |
 | 阴影 | 克制：只有卡片 `shadow-soft`、弹层 `shadow-lift`、抽屉 `shadow-panel` |
 | 断点 | `sm 640 / md 768 / lg 1024`；内容容器 `max-w-content`（1120px）+ `px-6` |
-| 移动端 | 375px 不得横向滚动；导航收成汉堡；编辑入口用浮动按钮（`md:hidden`） |
+| 移动端 | 375px 不得横向滚动；导航收成汉堡；解锁后才有浮动编辑按钮（`md:hidden`） |
 | 动效 | `.reveal` 淡入 0.65s；必须尊重 `prefers-reduced-motion` |
 | 无障碍 | 交互元素用 `button`/`a` 并带 `aria-label`；`:focus-visible` 描边；图片有 `alt` |
 

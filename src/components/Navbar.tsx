@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, Pencil, X } from 'lucide-react';
 import { useSiteData } from '../store/siteData';
 
@@ -11,7 +11,7 @@ const links = [
 ];
 
 export function Navbar() {
-  const { data, requestEdit: openEditor } = useSiteData();
+  const { data, unlocked, requestEdit } = useSiteData();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState('home');
   const [scrolled, setScrolled] = useState(false);
@@ -72,15 +72,17 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={openEditor}
-            className="hidden items-center gap-1.5 rounded-full border bg-surface px-4 py-2 text-[12px] transition-colors md:inline-flex"
-            style={{ borderColor: 'var(--line-strong)', color: 'var(--ink-soft)' }}
-          >
-            <Pencil size={13} />
-            编辑资料
-          </button>
+          {unlocked ? (
+            <button
+              type="button"
+              onClick={requestEdit}
+              className="hidden items-center gap-1.5 rounded-full border bg-surface px-4 py-2 text-[12px] transition-colors md:inline-flex"
+              style={{ borderColor: 'var(--line-strong)', color: 'var(--ink-soft)' }}
+            >
+              <Pencil size={13} />
+              编辑
+            </button>
+          ) : null}
 
           <button
             type="button"
@@ -110,20 +112,22 @@ export function Navbar() {
                 </a>
               </li>
             ))}
-            <li className="pt-2">
-              <button
-                type="button"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2.5 text-[13px]"
-                style={{ borderColor: 'var(--line-strong)' }}
-                onClick={() => {
-                  setOpen(false);
-                  openEditor();
-                }}
-              >
-                <Pencil size={13} />
-                编辑资料
-              </button>
-            </li>
+            {unlocked ? (
+              <li className="pt-2">
+                <button
+                  type="button"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2.5 text-[13px]"
+                  style={{ borderColor: 'var(--line-strong)' }}
+                  onClick={() => {
+                    setOpen(false);
+                    requestEdit();
+                  }}
+                >
+                  <Pencil size={13} />
+                  编辑
+                </button>
+              </li>
+            ) : null}
           </ul>
         </div>
       ) : null}

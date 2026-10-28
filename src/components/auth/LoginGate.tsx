@@ -78,9 +78,9 @@ export function LoginGate() {
               <Lock size={17} />
             </span>
             <div>
-              <p className="display text-lg">编辑需要验证</p>
+              <p className="display text-lg">需要口令</p>
               <p className="mt-0.5 text-[11.5px]" style={{ color: 'var(--muted)' }}>
-                这个页面只开放给本人维护
+                这是本人的维护入口
               </p>
             </div>
           </div>
@@ -136,13 +136,8 @@ export function LoginGate() {
         ) : null}
 
         <button type="submit" className="btn-primary mt-5 w-full !py-2.5 text-[13px]" disabled={locked}>
-          {locked ? `请等待 ${remaining} 秒` : '验证并进入编辑'}
+          {locked ? `请等待 ${remaining} 秒` : '进入'}
         </button>
-
-        <p className="mt-4 text-[11px] leading-6" style={{ color: 'var(--muted)' }}>
-          口令以哈希形式写在 <code className="rounded bg-white px-1 py-0.5 font-mono">src/auth/passcode.ts</code> 里，
-          想换口令改那个文件即可。这是纯前端校验，只用来挡住随手点开的人，不构成真正的安全边界。
-        </p>
       </form>
     </div>,
     document.body,

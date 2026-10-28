@@ -3,7 +3,7 @@ import { useSiteData } from '../store/siteData';
 import { useCopy } from '../hooks/useCopy';
 
 export function Hero() {
-  const { data, requestEdit, customized } = useSiteData();
+  const { data, requestEdit, customized, unlocked } = useSiteData();
   const { profile } = data;
   const { copied, copy } = useCopy(profile.email);
 
@@ -129,15 +129,17 @@ export function Hero() {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={requestEdit}
-            className="flex w-full items-center justify-center gap-2 border-t px-6 py-3 text-[12px] transition-colors"
-            style={{ borderColor: 'var(--line)', color: 'var(--muted)', background: 'var(--surface)' }}
-          >
-            <Pencil size={12} />
-            {customized ? '内容已在本机修改过 · 点这里继续编辑' : '这些内容只有本人能改（点这里验证口令）'}
-          </button>
+          {unlocked ? (
+            <button
+              type="button"
+              onClick={requestEdit}
+              className="flex w-full items-center justify-center gap-2 border-t px-6 py-3 text-[12px] transition-colors"
+              style={{ borderColor: 'var(--line)', color: 'var(--muted)', background: 'var(--surface)' }}
+            >
+              <Pencil size={12} />
+              {customized ? '继续编辑' : '编辑内容'}
+            </button>
+          ) : null}
         </aside>
       </div>
     </section>

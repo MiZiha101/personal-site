@@ -50,10 +50,8 @@ export function Footer() {
           className="mx-auto flex max-w-content flex-col gap-2 px-6 py-5 text-[11.5px] md:flex-row md:items-center md:justify-between"
           style={{ color: 'var(--muted)' }}
         >
-          <p>
-            © {new Date().getFullYear()} {profile.name} · 内容与代码均为本人整理
-          </p>
-          <p>React · TypeScript · Vite · Tailwind ｜ 内容可在页内编辑并保存在本机</p>
+          <p>© {new Date().getFullYear()} {profile.name} · 内容与代码均为本人整理</p>
+          <p>文章与项目均为个人学习记录，转载请注明出处</p>
         </div>
       </div>
     </footer>

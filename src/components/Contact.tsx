@@ -150,7 +150,7 @@ export function Contact() {
           </div>
 
           <p className="mt-4 text-[11px] leading-6" style={{ color: 'var(--muted)' }}>
-            这个表单只做前端校验与演示（没有接后端，内容不会上传）；需要我回复请直接用左边邮箱。
+            也可以直接发邮件到上面的邮箱，我一般当天会看。
           </p>
         </form>
       </div>
