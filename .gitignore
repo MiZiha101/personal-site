@@ -10,3 +10,5 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 *.tsbuildinfo
+# 编辑面板「导出 JSON」的下载产物，别提交进仓库
+personal-site-data.json
